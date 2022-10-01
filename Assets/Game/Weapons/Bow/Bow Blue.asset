@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 762f09c1ea0a5e74fb1b86b2f8b65392, type: 3}
-  m_Name: Bow
+  m_Name: Bow Blue
   m_EditorClassIdentifier: 
   animatorOverride: {fileID: 22100000, guid: b6e0c25205fe6cb479e33a4b88f71f89, type: 2}
   equippedPrefab: {fileID: 1307582643255418311, guid: 8f5b3fdc1b8ae09449088fb711ea2a53, type: 3}

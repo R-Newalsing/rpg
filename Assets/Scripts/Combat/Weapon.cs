@@ -11,15 +11,28 @@ public class Weapon : ScriptableObject {
     [SerializeField] float weaponRange = 2f;
     [SerializeField] bool isRightHanded = true;
 
+    const string weaponName = "Weapon";
+
     public void Spawn(Transform rightHand, Transform leftHand, Animator animator) {
+        DestroyOldWeapon(rightHand, leftHand);
+
         if (equippedPrefab != null) {
-            Instantiate(equippedPrefab, GetHandTransform(rightHand, leftHand));
+            GameObject weapon = Instantiate(equippedPrefab, GetHandTransform(rightHand, leftHand));
+            weapon.name = weaponName;
         }
 
         if (animatorOverride != null) {
             animator.runtimeAnimatorController = animatorOverride;
         }
 
+    }
+
+    void DestroyOldWeapon(Transform rightHand, Transform leftHand) {
+        Transform oldWeapon = rightHand.Find(weaponName) ?? rightHand.Find(weaponName);
+        Debug.WriteLine(oldWeapon.name);
+        if (oldWeapon == null) return;
+        oldWeapon.name = "DESTROYING";
+        Destroy(oldWeapon.gameObject); 
     }
 
     public bool HasProjectile() {
