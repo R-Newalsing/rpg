@@ -1,13 +1,15 @@
 using UnityEngine;
 using RPG.Movement;
 using RPG.Core;
+using RPG.Saving;
 
 namespace RPG.Combat {
-public class Fighter : MonoBehaviour, IAction {
+public class Fighter : MonoBehaviour, IAction, ISaveable {
     [SerializeField] float timeBetweenAttacks = 1f;
     [SerializeField] Transform rightHandTransform = null;
     [SerializeField] Transform leftHandTransform = null;
     [SerializeField] Weapon defaultWeapon = null;
+    [SerializeField] string defaultWeaponName = "Unarmed";
     float timeSinceLastAttack = 2f;
 
     Weapon currentWeapon = null;
@@ -16,11 +18,16 @@ public class Fighter : MonoBehaviour, IAction {
     Animator animator;
     Mover mover;
 
-    private void Start() {
+    private void Awake() {
         mover = GetComponent<Mover>();
         scheduler = GetComponent<ActionScheduler>();
         animator = GetComponent<Animator>();
-        EquipWeapon(defaultWeapon);
+    }
+
+    private void Start() {
+        if (currentWeapon == null) {
+            EquipWeapon(defaultWeapon);
+        }
     }
 
     private void Update() {
@@ -64,12 +71,16 @@ public class Fighter : MonoBehaviour, IAction {
         if (target == null) return;
 
         if (currentWeapon.HasProjectile()) {
-            currentWeapon.LaunchProjectile(rightHandTransform, leftHandTransform, target);
+            currentWeapon.LaunchProjectile(rightHandTransform, leftHandTransform, GetOwner(), target);
             return;
         }
 
         // do damage to the target
         target.TakeDamage(currentWeapon.getDamage());
+    }
+
+    Health GetOwner() {
+        return GetComponent<Health>();
     }
 
     // animation event
@@ -104,5 +115,15 @@ public class Fighter : MonoBehaviour, IAction {
 
         Health targetToTest = targetCombat.GetComponent<Health>();
         return targetToTest != null && !targetToTest.IsDead();
+    }
+
+    public object CaptureState() {
+        return currentWeapon.name;
+    }
+
+    public void RestoreState(object state) {
+        string weaponName = (string) state;
+        Weapon weapon = Resources.Load<Weapon>(weaponName);
+        EquipWeapon(weapon);
     }
 }}

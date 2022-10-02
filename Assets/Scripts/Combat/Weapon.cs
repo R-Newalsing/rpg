@@ -21,10 +21,13 @@ public class Weapon : ScriptableObject {
             weapon.name = weaponName;
         }
 
+        var overrideController = animator.runtimeAnimatorController as AnimatorOverrideController;
+
         if (animatorOverride != null) {
             animator.runtimeAnimatorController = animatorOverride;
+        } else if(overrideController != null) {
+            animator.runtimeAnimatorController = overrideController.runtimeAnimatorController;
         }
-
     }
 
     void DestroyOldWeapon(Transform rightHand, Transform leftHand) {
@@ -40,13 +43,13 @@ public class Weapon : ScriptableObject {
         return projectile != null;
     }
 
-    public void LaunchProjectile(Transform rightHand, Transform leftHand, Health target) {
+    public void LaunchProjectile(Transform rightHand, Transform leftHand, Health owner, Health target) {
         Projectile projectileInstance = Instantiate(
             projectile,
             GetHandTransform(rightHand, leftHand).position,
             Quaternion.identity
         );
-        projectileInstance.SetTarget(target, weaponDamage);
+        projectileInstance.SetOwnerAndTarget(owner, target, weaponDamage);
     }
 
     Transform GetHandTransform(Transform rightHand, Transform leftHand) {

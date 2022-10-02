@@ -4,7 +4,7 @@ using RPG.Saving;
 
 namespace RPG.SceneManagement {
 public class SavingWrapper : MonoBehaviour {
-    const string defaultSaveFile = "save";
+    const string defaultSaveFile = "file";
     public float fadeInTime = 0.5f;
 
     IEnumerator Start() {
