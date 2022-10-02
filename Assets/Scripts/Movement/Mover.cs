@@ -20,7 +20,7 @@ public class Mover : MonoBehaviour, IAction, ISaveable {
     }
 
     void Update() {
-        agent.enabled = ! health.isDead();
+        agent.enabled = ! health.IsDead();
         UpdateAnimator();
     }
 

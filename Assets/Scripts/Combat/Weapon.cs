@@ -28,9 +28,10 @@ public class Weapon : ScriptableObject {
     }
 
     void DestroyOldWeapon(Transform rightHand, Transform leftHand) {
-        Transform oldWeapon = rightHand.Find(weaponName) ?? rightHand.Find(weaponName);
-        Debug.WriteLine(oldWeapon.name);
+        Transform oldWeapon = rightHand.Find(weaponName) ?? leftHand.Find(weaponName);
+        
         if (oldWeapon == null) return;
+
         oldWeapon.name = "DESTROYING";
         Destroy(oldWeapon.gameObject); 
     }

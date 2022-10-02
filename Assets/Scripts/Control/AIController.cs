@@ -34,7 +34,7 @@ public class AIController : MonoBehaviour {
     }
 
     private void Update() {
-        if (health.isDead()) return;
+        if (health.IsDead()) return;
         if (player == null) return;
 
         if (InAttackRange() && fighter.CanAttack(player)) {

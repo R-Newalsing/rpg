@@ -5,19 +5,23 @@ namespace RPG.Combat {
 public class Projectile : MonoBehaviour
 {
     [SerializeField] float speed = 5f;
+    [SerializeField] bool isHoming = false;
+    [SerializeField] GameObject hitEffect = null;
     Health target = null;
     float damage = 0;
 
     void Update() {
-        if (target == null) return;
-
-        transform.LookAt(GetAimLocation());
+        if (isHoming && !target.IsDead()) {
+            transform.LookAt(GetAimLocation());
+        }
+        
         transform.Translate(Vector3.forward * Time.deltaTime * speed);
     }
 
     public void SetTarget(Health target, float damage) {
         this.target = target;
         this.damage = damage;
+        if (! isHoming) transform.LookAt(GetAimLocation());
     }
 
     private Vector3 GetAimLocation() {
@@ -32,6 +36,10 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other) {
         if (other.GetComponent<Health>() == null) return;
+        if (target.IsDead()) return;
+        if (hitEffect != null) {
+            Instantiate(hitEffect, GetAimLocation(), transform.rotation);
+        } 
 
         target.TakeDamage(damage);
         Destroy(gameObject);

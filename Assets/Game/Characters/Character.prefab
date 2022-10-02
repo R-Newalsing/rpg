@@ -113,9 +113,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baad0467fa11deb4faa7d64008b7744e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponRange: 2
-  weaponDamage: 5
   timeBetweenAttacks: 1
+  rightHandTransform: {fileID: 0}
+  leftHandTransform: {fileID: 0}
+  defaultWeapon: {fileID: 0}
 --- !u!114 &7417007638087583897
 MonoBehaviour:
   m_ObjectHideFlags: 0

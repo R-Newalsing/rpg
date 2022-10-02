@@ -28,7 +28,7 @@ public class Fighter : MonoBehaviour, IAction {
 
         // if there is no target, do nothing
         if (target == null) return;
-        if (target.isDead()) return;
+        if (target.IsDead()) return;
 
         if (!IsInWeaponDistance()) {
             // if the fighter is not in weapon range, move towards the target
@@ -103,6 +103,6 @@ public class Fighter : MonoBehaviour, IAction {
         if (targetCombat == null) return false;
 
         Health targetToTest = targetCombat.GetComponent<Health>();
-        return targetToTest != null && !targetToTest.isDead();
+        return targetToTest != null && !targetToTest.IsDead();
     }
 }}

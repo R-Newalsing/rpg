@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        if (health.isDead()) return;
+        if (health.IsDead()) return;
         if (InteractWithCombat()) return;
         if (InteractWithMovement()) return;
     }

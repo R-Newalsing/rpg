@@ -8,7 +8,7 @@ public class Health : MonoBehaviour, ISaveable {
     Animator animator;
     ActionScheduler scheduler;
 
-    public bool isDead() {
+    public bool IsDead() {
         return ! isAlive;
     }
 
