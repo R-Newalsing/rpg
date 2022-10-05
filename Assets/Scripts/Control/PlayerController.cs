@@ -1,7 +1,7 @@
+using UnityEngine;
+using RPG.Attributes;
 using RPG.Movement;
 using RPG.Combat;
-using RPG.Core;
-using UnityEngine;
 
 namespace RPG.Control {
 public class PlayerController : MonoBehaviour {

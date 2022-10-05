@@ -1,7 +1,8 @@
 using UnityEngine;
+using RPG.Attributes;
+using RPG.Movement;
 using RPG.Combat;
 using RPG.Core;
-using RPG.Movement;
 
 namespace RPG.Control {
 public class AIController : MonoBehaviour {

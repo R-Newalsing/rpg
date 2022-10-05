@@ -142,6 +142,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startingLevel: 1
   characterClass: 0
+  progression: {fileID: 0}
 --- !u!114 &4934678603420959032
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,6 +155,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a9e6bc31da097a44af50f43148118d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4223111844241011321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3443680892700470066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63eeced5422219e49870b7bec4ff4a56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  experiencePoints: 0
 --- !u!4 &3443680892700470070 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2633365986881898641, guid: bc2dc4ea0462cf640b0940ec760b87a5, type: 3}

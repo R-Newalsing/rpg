@@ -1,5 +1,5 @@
+using RPG.Attributes;
 using UnityEngine;
-using RPG.Core;
 
 namespace RPG.Combat {
 public class Projectile : MonoBehaviour
@@ -27,6 +27,7 @@ public class Projectile : MonoBehaviour
         this.target = target;
         this.damage = damage;
         this.owner = owner;
+        
         if (! isHoming) transform.LookAt(GetAimLocation());
         Destroy(gameObject, maxLifeTime);
     }
@@ -47,7 +48,7 @@ public class Projectile : MonoBehaviour
         if (foundTarget == null) return;
         if (foundTarget == owner) return;
         if (target.IsDead()) return;
-        target.TakeDamage(damage);
+        target.TakeDamage(owner.gameObject, damage);
 
         if (hitEffect != null) {
             GameObject impact = Instantiate(hitEffect, GetAimLocation(), transform.rotation);

@@ -1,7 +1,8 @@
 using UnityEngine;
+using RPG.Attributes;
 using RPG.Movement;
-using RPG.Core;
 using RPG.Saving;
+using RPG.Core;
 
 namespace RPG.Combat {
 public class Fighter : MonoBehaviour, IAction, ISaveable {
@@ -9,7 +10,6 @@ public class Fighter : MonoBehaviour, IAction, ISaveable {
     [SerializeField] Transform rightHandTransform = null;
     [SerializeField] Transform leftHandTransform = null;
     [SerializeField] Weapon defaultWeapon = null;
-    [SerializeField] string defaultWeaponName = "Unarmed";
     float timeSinceLastAttack = 2f;
 
     Weapon currentWeapon = null;
@@ -52,6 +52,10 @@ public class Fighter : MonoBehaviour, IAction, ISaveable {
         weapon.Spawn(rightHandTransform, leftHandTransform, animator);
     }
 
+    public Health GetTarget() {
+        return target;
+    }
+
     private void AttackBehaviour() {
         transform.LookAt(target.transform.position);
 
@@ -76,7 +80,7 @@ public class Fighter : MonoBehaviour, IAction, ISaveable {
         }
 
         // do damage to the target
-        target.TakeDamage(currentWeapon.getDamage());
+        target.TakeDamage(gameObject, currentWeapon.getDamage());
     }
 
     Health GetOwner() {
