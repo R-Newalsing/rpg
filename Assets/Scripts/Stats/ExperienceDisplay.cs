@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace RPG.Attributes {
+namespace RPG.Stats {
 public class ExperienceDisplay : MonoBehaviour {
     TextMeshProUGUI experienceValue;
     Experience experience;
@@ -12,6 +12,6 @@ public class ExperienceDisplay : MonoBehaviour {
     }
 
     private void Update() {
-        experienceValue.text = experience.GetExperience().ToString(); 
+        experienceValue.text = experience.GetExperience().ToString();
     }
 }}
