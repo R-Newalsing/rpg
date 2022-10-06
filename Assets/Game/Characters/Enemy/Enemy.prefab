@@ -78,6 +78,10 @@ PrefabInstance:
       propertyPath: health
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: -7039040127604558360, guid: bc2dc4ea0462cf640b0940ec760b87a5, type: 3}
+      propertyPath: characterClass
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2602615725880192265, guid: bc2dc4ea0462cf640b0940ec760b87a5, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -196,20 +200,6 @@ CapsuleCollider:
   m_Height: 2.3
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &-8556659484538471220
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7101794264379387268}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14aef16f8e40944b88c4a54700c6d72d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startingLevel: 1
-  characterClass: 1
 --- !u!114 &-752735085418010257
 MonoBehaviour:
   m_ObjectHideFlags: 0
