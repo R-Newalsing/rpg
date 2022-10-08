@@ -8,6 +8,7 @@ public class Weapon : ScriptableObject {
     [SerializeField] GameObject equippedPrefab = null;
     [SerializeField] Projectile projectile = null;
     [SerializeField] float weaponDamage = 5f;
+    [SerializeField] float weaponPercentageBonus = 0f;
     [SerializeField] float weaponRange = 2f;
     [SerializeField] bool isRightHanded = true;
 
@@ -43,24 +44,34 @@ public class Weapon : ScriptableObject {
         return projectile != null;
     }
 
-    public void LaunchProjectile(Transform rightHand, Transform leftHand, Health owner, Health target) {
+    public void LaunchProjectile(
+        Transform rightHand,
+        Transform leftHand,
+        Health owner,
+        Health target,
+        float calculatedDamage
+    ) {
         Projectile projectileInstance = Instantiate(
             projectile,
             GetHandTransform(rightHand, leftHand).position,
             Quaternion.identity
         );
-        projectileInstance.SetOwnerAndTarget(owner, target, weaponDamage);
+        projectileInstance.SetOwnerAndTarget(owner, target, calculatedDamage);
     }
 
     Transform GetHandTransform(Transform rightHand, Transform leftHand) {
         return isRightHanded ? rightHand : leftHand;
     }
 
-    public float getDamage() {
+    public float GetDamage() {
         return weaponDamage;
     }
 
-    public float getRange() {
+    public float GetRange() {
         return weaponRange;
+    }
+
+    public float GetPercentageBonus() {
+        return weaponPercentageBonus;
     }
 }}

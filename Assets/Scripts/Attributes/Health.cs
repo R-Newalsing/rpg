@@ -5,29 +5,36 @@ using RPG.Core;
 
 namespace RPG.Attributes {
 public class Health : MonoBehaviour, ISaveable {
-    public float healthPoints = 100f;
-    float maxHealthPoints = 100f;
+    float healthPoints = -1f;
     bool isAlive = true;
     BaseStats baseStats;
     Animator animator;
     ActionScheduler scheduler;
 
-    private void Start() {
+    private void Awake() {
+        animator = GetComponent<Animator>();
+        scheduler = GetComponent<ActionScheduler>();
         baseStats = GetComponent<BaseStats>();
-        healthPoints = baseStats.GetStat(Stat.Health);
-        maxHealthPoints = healthPoints;
+    }
+
+    private void Start() {
+        baseStats.onLevelUp += RegenerateHealth;
+
+        if (healthPoints < 0) {
+            healthPoints = baseStats.GetStat(Stat.Health);
+        }
     }
 
     public bool IsDead() {
         return ! isAlive;
     }
 
-    private void Awake() {
-        animator = GetComponent<Animator>();
-        scheduler = GetComponent<ActionScheduler>();
+    private void RegenerateHealth() {
+        healthPoints = baseStats.GetStat(Stat.Health);
     }
 
     public void TakeDamage(GameObject instigator, float damage) {
+        print(gameObject.name  + " took damag: " + damage);
         healthPoints = Mathf.Max(healthPoints - damage, 0);
 
         if (healthPoints == 0 && isAlive) {
@@ -36,8 +43,16 @@ public class Health : MonoBehaviour, ISaveable {
         } 
     }
 
+    public float GetHealthpoints() {
+        return healthPoints;
+    }
+
+    public float GetMaxHealthpoints() {
+        return baseStats.GetStat(Stat.Health);
+    }
+
     public float GetHealthPercentage() {
-        return Mathf.Abs(100 * (healthPoints / maxHealthPoints));
+        return Mathf.Abs(100 * (healthPoints / baseStats.GetStat(Stat.Health)));
     }
 
     void Die() {

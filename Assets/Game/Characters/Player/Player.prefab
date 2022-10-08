@@ -7,6 +7,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -7039040127604558360, guid: bc2dc4ea0462cf640b0940ec760b87a5, type: 3}
+      propertyPath: levelUpEffect
+      value: 
+      objectReference: {fileID: 7173300692085331154, guid: c0099ee23e3b647bfbd60d1893716931, type: 3}
     - target: {fileID: 2633365986881898641, guid: bc2dc4ea0462cf640b0940ec760b87a5, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -143,18 +147,8 @@ MonoBehaviour:
   startingLevel: 1
   characterClass: 0
   progression: {fileID: 0}
---- !u!114 &4934678603420959032
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3443680892700470066}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a9e6bc31da097a44af50f43148118d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  levelUpEffect: {fileID: 0}
+  shouldUseModefiers: 1
 --- !u!114 &4223111844241011321
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,6 +162,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   experiencePoints: 0
+--- !u!114 &4934678603420959032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3443680892700470066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a9e6bc31da097a44af50f43148118d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &3443680892700470070 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2633365986881898641, guid: bc2dc4ea0462cf640b0940ec760b87a5, type: 3}

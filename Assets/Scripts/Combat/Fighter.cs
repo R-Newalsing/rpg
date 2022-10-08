@@ -3,9 +3,11 @@ using RPG.Attributes;
 using RPG.Movement;
 using RPG.Saving;
 using RPG.Core;
+using RPG.Stats;
+using System.Collections.Generic;
 
 namespace RPG.Combat {
-public class Fighter : MonoBehaviour, IAction, ISaveable {
+public class Fighter : MonoBehaviour, IAction, ISaveable, IModefierProvider {
     [SerializeField] float timeBetweenAttacks = 1f;
     [SerializeField] Transform rightHandTransform = null;
     [SerializeField] Transform leftHandTransform = null;
@@ -13,15 +15,17 @@ public class Fighter : MonoBehaviour, IAction, ISaveable {
     float timeSinceLastAttack = 2f;
 
     Weapon currentWeapon = null;
-    Health target;
     ActionScheduler scheduler;
+    BaseStats baseStats;
     Animator animator;
+    Health target;
     Mover mover;
 
     private void Awake() {
         mover = GetComponent<Mover>();
         scheduler = GetComponent<ActionScheduler>();
         animator = GetComponent<Animator>();
+        baseStats = GetComponent<BaseStats>();
     }
 
     private void Start() {
@@ -56,6 +60,14 @@ public class Fighter : MonoBehaviour, IAction, ISaveable {
         return target;
     }
 
+    public IEnumerable<float> GetAdditiveModefiers(Stat stat) {
+        if (stat == Stat.Damage) yield return currentWeapon.GetDamage();
+    }
+
+    public IEnumerable<float> GetPercentageModefiers(Stat stat) {
+        if (stat == Stat.Damage) yield return currentWeapon.GetPercentageBonus();
+    }
+
     private void AttackBehaviour() {
         transform.LookAt(target.transform.position);
 
@@ -73,14 +85,15 @@ public class Fighter : MonoBehaviour, IAction, ISaveable {
     // animation event
     void Hit() {
         if (target == null) return;
+        float damage = baseStats.GetStat(Stat.Damage);
 
         if (currentWeapon.HasProjectile()) {
-            currentWeapon.LaunchProjectile(rightHandTransform, leftHandTransform, GetOwner(), target);
+            currentWeapon.LaunchProjectile(rightHandTransform, leftHandTransform, GetOwner(), target, damage);
             return;
         }
 
         // do damage to the target
-        target.TakeDamage(gameObject, currentWeapon.getDamage());
+        target.TakeDamage(gameObject, damage);
     }
 
     Health GetOwner() {
@@ -111,7 +124,7 @@ public class Fighter : MonoBehaviour, IAction, ISaveable {
     //  get the distance between the fighter and the target 
     bool IsInWeaponDistance() {
         float distance = Vector3.Distance(transform.position, target.transform.position);
-        return distance < currentWeapon.getRange();
+        return distance < currentWeapon.GetRange();
     }
 
     public bool CanAttack(GameObject targetCombat) {

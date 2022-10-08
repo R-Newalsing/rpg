@@ -14,7 +14,7 @@ public class EnemyHealthDisplay : MonoBehaviour {
 
     private void Update() {
         if (playerFighter.GetTarget() != null) {
-            healthValue.text = playerFighter.GetTarget().GetHealthPercentage() + "%"; 
+            healthValue.text = string.Format("{0:0}/{1:0}", playerFighter.GetTarget().GetHealthpoints(), playerFighter.GetTarget().GetMaxHealthpoints());
         } else {
             healthValue.text = defaultValue; 
         }

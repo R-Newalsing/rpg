@@ -12,6 +12,6 @@ public class HealthDisplay : MonoBehaviour {
     }
 
     private void Update() {
-        healthValue.text = health.GetHealthPercentage() + "%"; 
+        healthValue.text = string.Format("{0:0}/{1:0}", health.GetHealthpoints(), health.GetMaxHealthpoints());
     }
 }}
