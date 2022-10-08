@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Linq;
+using GameDevTV.Utils;
 
 namespace RPG.Stats {
 public class BaseStats : MonoBehaviour {
@@ -11,24 +12,33 @@ public class BaseStats : MonoBehaviour {
     [SerializeField] GameObject levelUpEffect = null;
     [SerializeField] bool shouldUseModefiers = false;
 
-    int currentLevel = 0;
+    Experience experience;
+    LazyValue<int> currentLevel;
     public event Action onLevelUp;
 
-    private void Start() {
-        currentLevel = CalculateLevel();
-        Experience experience = GetComponent<Experience>();
+    private void Awake() {
+        experience = GetComponent<Experience>();
+        currentLevel = new LazyValue<int>(CalculateLevel);
+    }
 
+    private void Start() {
+        currentLevel.ForceInit();
+    }
+
+    private void OnEnable() {
         if (experience != null) {
             experience.onExperienceGained += UpdateLevel;
         }
     }
 
-    public int GetLevel() {
-        if (currentLevel < 1) {
-            currentLevel = CalculateLevel();
+    private void OnDisable() {
+        if (experience != null) {
+            experience.onExperienceGained -= UpdateLevel;
         }
+    }
 
-        return currentLevel;
+    public int GetLevel() {
+        return currentLevel.value;
     }
 
     public float GetStat(Stat stat) {
@@ -60,8 +70,8 @@ public class BaseStats : MonoBehaviour {
     private void UpdateLevel() {
         int newLevel = CalculateLevel();
 
-        if (newLevel > currentLevel) {
-            currentLevel = newLevel;
+        if (newLevel > currentLevel.value) {
+            currentLevel.value = newLevel;
             LevelUpEffect();
             onLevelUp();
         }

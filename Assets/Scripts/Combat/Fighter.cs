@@ -5,6 +5,7 @@ using RPG.Saving;
 using RPG.Core;
 using RPG.Stats;
 using System.Collections.Generic;
+using GameDevTV.Utils;
 
 namespace RPG.Combat {
 public class Fighter : MonoBehaviour, IAction, ISaveable, IModefierProvider {
@@ -12,9 +13,9 @@ public class Fighter : MonoBehaviour, IAction, ISaveable, IModefierProvider {
     [SerializeField] Transform rightHandTransform = null;
     [SerializeField] Transform leftHandTransform = null;
     [SerializeField] Weapon defaultWeapon = null;
-    float timeSinceLastAttack = 2f;
 
-    Weapon currentWeapon = null;
+    float timeSinceLastAttack = 2f;
+    LazyValue<Weapon> currentWeapon;
     ActionScheduler scheduler;
     BaseStats baseStats;
     Animator animator;
@@ -26,12 +27,16 @@ public class Fighter : MonoBehaviour, IAction, ISaveable, IModefierProvider {
         scheduler = GetComponent<ActionScheduler>();
         animator = GetComponent<Animator>();
         baseStats = GetComponent<BaseStats>();
+        currentWeapon = new LazyValue<Weapon>(SetupDefaultWeapon);
     }
 
     private void Start() {
-        if (currentWeapon == null) {
-            EquipWeapon(defaultWeapon);
-        }
+        currentWeapon.ForceInit();
+    }
+
+    private Weapon SetupDefaultWeapon() {
+        AttachWeapon(defaultWeapon);
+        return defaultWeapon;
     }
 
     private void Update() {
@@ -52,7 +57,11 @@ public class Fighter : MonoBehaviour, IAction, ISaveable, IModefierProvider {
     }
 
     public void EquipWeapon(Weapon weapon) {
-        currentWeapon = weapon;
+        currentWeapon.value = weapon;
+        AttachWeapon(weapon);
+    }
+
+    private void AttachWeapon(Weapon weapon) {
         weapon.Spawn(rightHandTransform, leftHandTransform, animator);
     }
 
@@ -61,11 +70,11 @@ public class Fighter : MonoBehaviour, IAction, ISaveable, IModefierProvider {
     }
 
     public IEnumerable<float> GetAdditiveModefiers(Stat stat) {
-        if (stat == Stat.Damage) yield return currentWeapon.GetDamage();
+        if (stat == Stat.Damage) yield return currentWeapon.value.GetDamage();
     }
 
     public IEnumerable<float> GetPercentageModefiers(Stat stat) {
-        if (stat == Stat.Damage) yield return currentWeapon.GetPercentageBonus();
+        if (stat == Stat.Damage) yield return currentWeapon.value.GetPercentageBonus();
     }
 
     private void AttackBehaviour() {
@@ -87,8 +96,8 @@ public class Fighter : MonoBehaviour, IAction, ISaveable, IModefierProvider {
         if (target == null) return;
         float damage = baseStats.GetStat(Stat.Damage);
 
-        if (currentWeapon.HasProjectile()) {
-            currentWeapon.LaunchProjectile(rightHandTransform, leftHandTransform, GetOwner(), target, damage);
+        if (currentWeapon.value.HasProjectile()) {
+            currentWeapon.value.LaunchProjectile(rightHandTransform, leftHandTransform, GetOwner(), target, damage);
             return;
         }
 
@@ -124,7 +133,7 @@ public class Fighter : MonoBehaviour, IAction, ISaveable, IModefierProvider {
     //  get the distance between the fighter and the target 
     bool IsInWeaponDistance() {
         float distance = Vector3.Distance(transform.position, target.transform.position);
-        return distance < currentWeapon.GetRange();
+        return distance < currentWeapon.value.GetRange();
     }
 
     public bool CanAttack(GameObject targetCombat) {
@@ -135,7 +144,7 @@ public class Fighter : MonoBehaviour, IAction, ISaveable, IModefierProvider {
     }
 
     public object CaptureState() {
-        return currentWeapon.name;
+        return currentWeapon.value.name;
     }
 
     public void RestoreState(object state) {

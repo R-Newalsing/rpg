@@ -13,12 +13,12 @@ public class Portal : MonoBehaviour {
 
     SavingWrapper saving;
 
-    private void Start() {
-        saving = FindObjectOfType<SavingWrapper>();
-    }
-
     public enum DestinationIdentifier {
         A, B,
+    }
+
+    private void Awake() {
+        saving = FindObjectOfType<SavingWrapper>();
     }
 
     private void OnTriggerEnter(Collider other) {

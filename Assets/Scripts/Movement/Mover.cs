@@ -12,8 +12,7 @@ public class Mover : MonoBehaviour, IAction, ISaveable {
     ActionScheduler scheduler;
     Health health;
 
-    // Start is called before the first frame update
-    void Start() {
+    private void Awake() {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         scheduler = GetComponent<ActionScheduler>();
@@ -69,9 +68,7 @@ public class Mover : MonoBehaviour, IAction, ISaveable {
 
     public void RestoreState(object state) {
         MoverSaveData data = (MoverSaveData) state;
-        // agent.enabled = false;
         transform.position = data.position.ToVector();
         transform.eulerAngles = data.rotation.ToVector();
-        // agent.enabled = true;
     }
 }}

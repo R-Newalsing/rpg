@@ -2,10 +2,11 @@ using UnityEngine;
 using RPG.Saving;
 using RPG.Stats;
 using RPG.Core;
+using GameDevTV.Utils;
 
 namespace RPG.Attributes {
 public class Health : MonoBehaviour, ISaveable {
-    float healthPoints = -1f;
+    LazyValue<float> healthPoints;
     bool isAlive = true;
     BaseStats baseStats;
     Animator animator;
@@ -15,14 +16,19 @@ public class Health : MonoBehaviour, ISaveable {
         animator = GetComponent<Animator>();
         scheduler = GetComponent<ActionScheduler>();
         baseStats = GetComponent<BaseStats>();
+        healthPoints = new LazyValue<float>(GetInitialHealth);
     }
 
     private void Start() {
-        baseStats.onLevelUp += RegenerateHealth;
+        healthPoints.ForceInit();
+    }
 
-        if (healthPoints < 0) {
-            healthPoints = baseStats.GetStat(Stat.Health);
-        }
+    private float GetInitialHealth() {
+        return baseStats.GetStat(Stat.Health);
+    }
+
+    private void OnEnable() {
+        baseStats.onLevelUp += RegenerateHealth;
     }
 
     public bool IsDead() {
@@ -30,21 +36,21 @@ public class Health : MonoBehaviour, ISaveable {
     }
 
     private void RegenerateHealth() {
-        healthPoints = baseStats.GetStat(Stat.Health);
+        healthPoints.value = baseStats.GetStat(Stat.Health);
     }
 
     public void TakeDamage(GameObject instigator, float damage) {
         print(gameObject.name  + " took damag: " + damage);
-        healthPoints = Mathf.Max(healthPoints - damage, 0);
+        healthPoints.value = Mathf.Max(healthPoints.value - damage, 0);
 
-        if (healthPoints == 0 && isAlive) {
+        if (healthPoints.value == 0 && isAlive) {
             Die();
             AwardExperience(instigator);
         } 
     }
 
     public float GetHealthpoints() {
-        return healthPoints;
+        return healthPoints.value;
     }
 
     public float GetMaxHealthpoints() {
@@ -52,7 +58,7 @@ public class Health : MonoBehaviour, ISaveable {
     }
 
     public float GetHealthPercentage() {
-        return Mathf.Abs(100 * (healthPoints / baseStats.GetStat(Stat.Health)));
+        return Mathf.Abs(100 * (healthPoints.value / baseStats.GetStat(Stat.Health)));
     }
 
     void Die() {
@@ -75,9 +81,9 @@ public class Health : MonoBehaviour, ISaveable {
 
     public void RestoreState(object state) {
         float health = (float) state;
-        healthPoints = health;
+        healthPoints.value = health;
 
-        if (healthPoints <= 0) {
+        if (healthPoints.value <= 0) {
             Die();
         }
     }

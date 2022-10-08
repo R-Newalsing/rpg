@@ -9,12 +9,12 @@ public class PlayerController : MonoBehaviour {
     Health health;
     Fighter fighter;
 
-    void Start() {
+    private void Awake() {
         mover = GetComponent<Mover>();
         fighter = GetComponent<Fighter>();
         health = GetComponent<Health>();
     }
-
+    
     // Update is called once per frame
     void Update() {
         if (health.IsDead()) return;
